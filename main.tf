@@ -70,13 +70,3 @@ resource "azurerm_mssql_database" "sqldb" {
   max_size_gb = 2
 }
 
-# Allow SQL only from your vNet subnet
-resource "azurerm_mssql_virtual_network_rule" "sql_vnet_rule" {
-  name      = "sql-vnet-rule-${random_integer.deployment_id_suffix.result}"
-  server_id = azurerm_mssql_server.sql.id
-  subnet_id = azurerm_subnet.subnet.id
-}
-
-
-
-##
