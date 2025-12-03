@@ -42,3 +42,6 @@ resource "azurerm_storage_account" "storage" {
 
   tags = local.tags
 }
+
+
+##
