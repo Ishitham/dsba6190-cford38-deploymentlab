@@ -43,22 +43,22 @@ resource "azurerm_storage_account" "storage" {
   tags = local.tags
 }
 
-  # SQL Server
+# SQL Server
 resource "azurerm_mssql_server" "sql" {
-  name                         = "sql${random_integer.deployment_id_suffix.result}"
-  resource_group_name          = azurerm_resource_group.rg.name
-  location                     = azurerm_resource_group.rg.location
-  version                      = "12.0"
+  name                = "sql${random_integer.deployment_id_suffix.result}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  version             = "12.0"
 
   administrator_login          = "sqladminuser"
-  administrator_login_password = "ChangeThisP@ssword123!"  
+  administrator_login_password = "ChangeThisP@ssword123!"
 }
 
 # SQL Database
 resource "azurerm_mssql_database" "sqldb" {
   name        = "sqldb${random_integer.deployment_id_suffix.result}"
   server_id   = azurerm_mssql_server.sql.id
-  sku_name    = "Basic"      # or "S0" if your lab wants Standard
+  sku_name    = "Basic" # or "S0" if your lab wants Standard
   max_size_gb = 2
 }
 
