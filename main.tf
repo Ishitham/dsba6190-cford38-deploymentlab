@@ -43,6 +43,14 @@ resource "azurerm_storage_account" "storage" {
   tags = local.tags
 }
 
+# Virtual Network
+resource "azurerm_virtual_network" "vnet" {
+  name                = "vnet${random_integer.deployment_id_suffix.result}"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
 # SQL Server
 resource "azurerm_mssql_server" "sql" {
   name                = "sql${random_integer.deployment_id_suffix.result}"
@@ -69,24 +77,6 @@ resource "azurerm_mssql_virtual_network_rule" "sql_vnet_rule" {
   subnet_id = azurerm_subnet.subnet.id
 }
 
-# Network Security Group for the VM (allow SSH)
-resource "azurerm_network_security_group" "vm_nsg" {
-  name                = "nsg-vm-${random_integer.deployment_id_suffix.result}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 1000
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
 
 
 ##
